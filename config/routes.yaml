@@ -1,0 +1,7 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+
+app_vehicule:
+  path: /voitures
+  controller: App\Controller\VehiculeController::allVoitures

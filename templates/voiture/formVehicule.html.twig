@@ -1,0 +1,11 @@
+{% extends 'layout.html.twig' %} {% block title %}{{ parent()}} - Ajout véhicule {%
+endblock %} {% block content %}
+
+<div class="container" style="width: 70%">
+     <br /><br />
+  <h1 class="text-success">Ajout d'une voiture</h1>
+       <br /><br />
+  {{ form(formVehicule) }}
+</div>
+
+{% endblock %}
