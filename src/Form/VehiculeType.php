@@ -5,7 +5,9 @@ namespace App\Form;
 use App\Entity\Vehicule;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class VehiculeType extends AbstractType
@@ -17,7 +19,18 @@ class VehiculeType extends AbstractType
             ->add('marque')
             ->add('model')
             ->add('description')
-            ->add('photo')
+            ->add('photo', FileType::class, [
+                'label'=>'Photo du véhicule',
+                'constraints'=>[
+                    new File([
+                        'maxSize'=>'1024k',
+                        'mimeTypes'=>[
+                            'image/*'
+                        ]
+                    ])
+                        ],
+                        'data_class'=>null,
+            ])
             ->add('prixJournalier')
             ->add('Ajouter', SubmitType::class)
         ;

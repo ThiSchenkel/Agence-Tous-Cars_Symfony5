@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class VehiculeController extends AbstractController
 {
@@ -23,6 +24,25 @@ class VehiculeController extends AbstractController
         $form->handleRequest($request);
         if($form->isSubmitted()&& $form->isValid()){
             $car->setdateEnregistrement ( new DateTime("now"));
+
+            $photo = $form->get('photo')->getData();
+
+            if($car->getPhoto()!== null){
+
+            $file = $form->get('photo')->getData();
+
+            $fileName= uniqid(). '-' .$file->guessExtension();
+            try{
+            $file->move(
+                $this->getParameter('images_directory'),
+                $fileName
+            );
+            }catch(FileException $e){
+                return new Response($e->getMessage());
+            }
+            $car->setPhoto($fileName);
+        }
+
             $manager=$doctrine->getManager();
             $manager->persist($car);
             $manager->flush();
@@ -65,12 +85,28 @@ class VehiculeController extends AbstractController
         $form =$this->createForm(VehiculeType::class, $car);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
+        $car->setdateEnregistrement ( new DateTime("now"));
+            $photo = $form->get('photo')->getData();
+            if($car->getPhoto()!== null){
+            $file = $form->get('photo')->getData();
+            $fileName= uniqid(). '-' .$file->guessExtension();
+            try{
+            $file->move(
+                $this->getParameter('images_directory'),
+                $fileName
+            );
+            }catch(FileException $e){
+                return new Response($e->getMessage());
+            }
+            $car->setPhoto($fileName);
+        }
         $manager=$doctrine->getManager();
         $manager->persist($car);
         $manager->flush();
 
-                return $this->redirectToRoute("app_voiture");
+        return $this->redirectToRoute("app_voiture");
         }
+
         return $this->render('voiture/formVehicule.html.twig', [
             'formVehicule'=>$form->createView(),
         ]);

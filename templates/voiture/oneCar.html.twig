@@ -9,6 +9,9 @@ endblock %} {% block content %}
       Modèle
       {{ car.model}}
     </h6>
+    {% if car.photo is not null %}
+    <img width="30%" src="{{ asset('uploads/' ~ car.photo) }}">
+    {% endif %}
     <h6>
       {{ car.description }}
     </h6>
