@@ -19,9 +19,7 @@ class VehiculeType extends AbstractType
             ->add('description')
             ->add('photo')
             ->add('prixJournalier')
-            ->add('dateEnregistrement')
             ->add('Ajouter', SubmitType::class)
-
         ;
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use DateTime;
 use App\Entity\Vehicule;
 use App\Form\VehiculeType;
 use Doctrine\Persistence\ManagerRegistry;
@@ -21,6 +22,7 @@ class VehiculeController extends AbstractController
         $form = $this->createForm(VehiculeType::class, $car);
         $form->handleRequest($request);
         if($form->isSubmitted()&& $form->isValid()){
+            $car->setdateEnregistrement ( new DateTime("now"));
             $manager=$doctrine->getManager();
             $manager->persist($car);
             $manager->flush();
@@ -53,17 +55,6 @@ class VehiculeController extends AbstractController
             'car'=>$car
         ]);
     }
-
-    // /**
-    //  * @Route("/one_car/{id}", name="one_car")
-    //  */
-    // public function oneCar($id, ManagerRegistry $doctrine): Response
-    // {
-    //     $car=$doctrine->getRepository(Vehicule::class)->find($id);
-    //     return $this->render('voiture/oneCar.html.twig', [
-    //         'car'=>$car
-    //     ]);
-    // }
 
     /**
      * @Route("/update_car/{id<\d+>}", name="update_car")
