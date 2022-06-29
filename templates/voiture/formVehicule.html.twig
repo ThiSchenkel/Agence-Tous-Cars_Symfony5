@@ -1,19 +1,22 @@
-{% extends 'layout.html.twig' %} {% block title %}{{ parent()}}  {%
-endblock %} {% block content %}
+{% extends 'layout.html.twig' %} {% block title %}{{ parent()}} 
+ {%endblock %} {% block content %}
 
 <div class="container" style="width: 70%">
      <br /><br />
 
-     {% if ('<a href="{{ path("update_car")}}"></a>') == true %}
+
+     {# {{ path('update_car/{id<\d+>}') ? '<h1 class="text-success">Modifier une fiche voiture</h1>' : '<h1 class="text-success">Ajouter la fiche</h1>'}}   #}
+
+    {% if ('<a href="{{ path("update_car")}}">') == true %}
         <h1 class="text-success">Modifier la fiche</h1>
-     {% else %}
-     <h1 class="text-success">Ajouter une fiche voiture</h1>
-     {% endif %}
+          {% endif %}
+    {% if ('<a href="{{ path("ajout_voiture")}}">') == true %}
+        <h1 class="text-success">Ajouter une fiche voiture</h1>
+     {% endif %}  
 
        <br /><br />
-  {{ form_start(formVehicule) }}
-  {{ form_row(formVehicule.photo) }}
-  {{ form_end(formVehicule) }}
+  {{ form(formVehicule) }}
+  
 </div>
 
 {% endblock %}

@@ -5,6 +5,7 @@ namespace App\Controller;
 use DateTime;
 use App\Entity\Vehicule;
 use App\Form\VehiculeType;
+use App\Repository\VehiculeRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,6 +15,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class VehiculeController extends AbstractController
 {
+
     /**
      * @Route("ajout-voiture", name="ajout_voiture")
      */
@@ -31,7 +33,7 @@ class VehiculeController extends AbstractController
 
             $file = $form->get('photo')->getData();
 
-            $fileName= uniqid(). '-' .$file->guessExtension();
+            $fileName= uniqid(). '-' . $file->guessExtension();
             try{
             $file->move(
                 $this->getParameter('images_directory'),
@@ -65,8 +67,19 @@ class VehiculeController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/admin/adminvoiture", name="admin_app_voiture")
+     */
+    public function adminVoitures(ManagerRegistry $doctrine, Request $request): Response
+    {
+        $adminVoitures=$doctrine->getRepository(Vehicule::class)->findAll();
+        return $this->render('voiture/admin/adminVoitures.html.twig', [
+            'adminVoitures'=>$adminVoitures
+        ]);
+    }
+
        /**
-     * @Route("/one_car/{id}", name="one_car")
+     * @Route("/one_car/{id<\d+>}", name="one_car")
      */
     public function oneCar($id, ManagerRegistry $doctrine): Response
     {
@@ -112,20 +125,22 @@ class VehiculeController extends AbstractController
         ]);
     }
 
+
           /**
-     * @Route("/delete_car_{id}", name="delete_car")
+     * @Route("/delete_car_{id<\d+>}", name="delete_car")
      */
-        public function delete($id, ManagerRegistry $doctrine)
+        public function delete($id, VehiculeRepository $repo)
     {
-                $car = $doctrine->getRepository(Vehicule::class)->find($id);
-                $manager=$doctrine->getManager();
-                $manager->remove($car);
-                $manager->flush();
+                // $car = $doctrine->getRepository(Vehicule::class)->find($id);
+                // $manager=$doctrine->getManager();
+                // $manager->remove($car);
+                // $manager->flush();
+                // return $this->redirectToRoute("app_voiture");
+
+                $car = $repo->find($id);
+                $repo->remove($car, 1); 
                 return $this->redirectToRoute("app_voiture");
     } 
 
 
-
-
-    
 }
