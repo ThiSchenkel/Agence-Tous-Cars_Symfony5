@@ -52,7 +52,7 @@
             {% endif %}
         </ul>
       </div>
-      <p class="mr-auto text-white">Bonjour Thi  </p>
+      <p class="mr-auto text-white">Hello</p>
     </div>
   </nav>
 </header>
@@ -61,6 +61,11 @@
 
  {% for message in app.flashes ('success') %}
    <div class="alert alert-success text-center">
+     <p> {{message}} </p>
+   </div>
+ {% endfor %}
+  {% for message in app.flashes ('error') %}
+   <div class="alert alert-danger text-center">
      <p> {{message}} </p>
    </div>
  {% endfor %}

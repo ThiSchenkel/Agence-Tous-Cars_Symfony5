@@ -21,6 +21,17 @@ class VehiculeController extends AbstractController
      */
     public function ajout(ManagerRegistry $doctrine, Request $request): Response
     {
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+             $this->addFlash('error', "Veuillez vous connecter pour accéder à la page");
+             return $this->redirectToRoute('app_login');
+        }
+
+        if (!$this->isGranted('ROLE_ADMIN')) {
+             $this->addFlash('error', "Vous n'avez pas les droits pour accéder à cette page");
+             return $this->redirectToRoute('app_home');
+        }
+
+
         $car = new Vehicule();
         $form = $this->createForm(VehiculeType::class, $car);
         $form->handleRequest($request);
@@ -96,6 +107,16 @@ class VehiculeController extends AbstractController
      */
     public function update(ManagerRegistry $doctrine, $id, Request $request) : Response
     {
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+             $this->addFlash('error', "Veuillez vous connecter pour accéder à la page");
+             return $this->redirectToRoute('app_login');
+        }
+
+        if (!$this->isGranted('ROLE_ADMIN')) {
+             $this->addFlash('error', "Vous n'avez pas les droits pour accéder à cette page");
+             return $this->redirectToRoute('app_home');
+        }
+
         $car = $doctrine->getRepository(Vehicule::class)->find($id);
         $form =$this->createForm(VehiculeType::class, $car);
         $form->handleRequest($request);
@@ -135,7 +156,15 @@ class VehiculeController extends AbstractController
      */
         public function delete($id, VehiculeRepository $repo)
     {
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+             $this->addFlash('error', "Veuillez vous connecter pour accéder à la page");
+             return $this->redirectToRoute('app_login');
+        }
 
+        if (!$this->isGranted('ROLE_ADMIN')) {
+             $this->addFlash('error', "Vous n'avez pas les droits pour accéder à cette page");
+             return $this->redirectToRoute('app_home');
+        }
                 $car = $repo->find($id);
                 $repo->remove($car, 1); 
 
