@@ -30,7 +30,13 @@ class VehiculeType extends AbstractType
                     ])
                         ],
                         'data_class'=>null,
-            ])
+                    'attr'=>[
+                    'class'=>'dropify',
+                    'id'=> 'input-file-now-costom-1',
+                    'for'=> 'input-file-now-costom-1'
+                ]],
+                    
+                    )
             ->add('prixJournalier')
             ->add('Ajouter', SubmitType::class)
         ;

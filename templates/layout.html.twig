@@ -17,13 +17,23 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="{{path("app_voiture")}}"> Accueil </a>
-          </li>
+        <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+              <a class="nav-link" href="{{ path("app_voiture")}}"> Vehicules</a>
+              </li>
+      {% if is_granted( 'IS_AUTHENTICATED_FULLY') %}
           <li class="nav-item">
-            <a class="nav-link" href="{{ path("app_voiture")}}"> Vehicules</a>
+            <a class="nav-link" href="{{ path("app_logout")}}"> Déconnexion</a>
           </li>
+              {% else %}
+              <li class="nav-item">
+              <a class="nav-link" href="{{ path("app_register")}}"> S'inscrire</a>
+              </li>
+              <li class="nav-item">
+              <a class="nav-link" href="{{ path("app_login")}}"> Se connecter</a>
+              </li>
+        {% endif %}  
+        {% if is_granted( 'IS_AUTHENTICATED_FULLY') and is_granted('ROLE_ADMIN') %}
           <div class="dropdown">
             <button
               class="btn btn-secondary dropdown-toggle"
@@ -39,22 +49,37 @@
               <li><a class="dropdown-item" href="{{ path('admin_app_voiture')}}">Liste des véhicules</a></li>
             </ul>
           </div>
+            {% endif %}
         </ul>
       </div>
+      <p class="mr-auto text-white">Bonjour Thi  </p>
     </div>
   </nav>
 </header>
 
 <main class="container mb-5 pb-5">
+
+ {% for message in app.flashes ('success') %}
+   <div class="alert alert-success text-center">
+     <p> {{message}} </p>
+   </div>
+ {% endfor %}
+
   {% block content %} 
   {% endblock %}
+
+  {% block final_js %} 
+  
+  {% endblock %}
+
+
 </main>
 
 <footer class="fixed-bottom bg-light">
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav mx-auto">
-        <li class="nav-item"><a class="nav-link" href=""> - CGV</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ path("app_cgv")}}"> - CGV</a></li>
         <li class="nav-item">
           <a class="nav-link" href=""> - Nous contacter </a>
         </li>

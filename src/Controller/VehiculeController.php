@@ -17,7 +17,7 @@ class VehiculeController extends AbstractController
 {
 
     /**
-     * @Route("ajout-voiture", name="ajout_voiture")
+     * @Route("/admin/ajout-voiture", name="ajout_voiture")
      */
     public function ajout(ManagerRegistry $doctrine, Request $request): Response
     {
@@ -48,6 +48,8 @@ class VehiculeController extends AbstractController
             $manager=$doctrine->getManager();
             $manager->persist($car);
             $manager->flush();
+
+             $this->addFlash('success', "Le véhicule a bien été ajouté");
 
             return $this->redirectToRoute('app_voiture');
         }
@@ -90,7 +92,7 @@ class VehiculeController extends AbstractController
     }
 
     /**
-     * @Route("/update_car/{id<\d+>}", name="update_car")
+     * @Route("/admin/update_car/{id<\d+>}", name="update_car")
      */
     public function update(ManagerRegistry $doctrine, $id, Request $request) : Response
     {
@@ -117,7 +119,9 @@ class VehiculeController extends AbstractController
         $manager->persist($car);
         $manager->flush();
 
-        return $this->redirectToRoute("app_voiture");
+        $this->addFlash('success', "Le véhicule a bien été mis à jour");
+
+        return $this->redirectToRoute("admin_app_voiture");
         }
 
         return $this->render('voiture/formVehicule.html.twig', [
@@ -127,19 +131,17 @@ class VehiculeController extends AbstractController
 
 
           /**
-     * @Route("/delete_car_{id<\d+>}", name="delete_car")
+     * @Route("/admin/delete_car_{id<\d+>}", name="delete_car")
      */
         public function delete($id, VehiculeRepository $repo)
     {
-                // $car = $doctrine->getRepository(Vehicule::class)->find($id);
-                // $manager=$doctrine->getManager();
-                // $manager->remove($car);
-                // $manager->flush();
-                // return $this->redirectToRoute("app_voiture");
 
                 $car = $repo->find($id);
                 $repo->remove($car, 1); 
-                return $this->redirectToRoute("app_voiture");
+
+                $this->addFlash('success', "La fiche a bien été supprimée");
+
+                return $this->redirectToRoute("admin_app_voiture");
     } 
 
 
